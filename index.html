@@ -1,0 +1,948 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="世界の高収益トレーダーの取引をリアルタイムで監視し、MT5自動コピーとDiscord通知で活用できるMillion Trader Watch Copy &amp; Signals。">
+  <meta name="theme-color" content="#07110f">
+  <title>Million Trader Watch Copy &amp; Signals｜世界の億トレーダーの売買を覗く</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2307110f'/%3E%3Cpath d='M12 40l12-13 9 8 19-20' fill='none' stroke='%2338e7a0' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='52' cy='15' r='5' fill='%23f2cb68'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      --ink: #07110f;
+      --ink-2: #0c1d19;
+      --panel: #112823;
+      --panel-2: #16342d;
+      --mint: #38e7a0;
+      --mint-soft: #b8f7dc;
+      --gold: #f2cb68;
+      --paper: #f5f7f2;
+      --muted: #9db2aa;
+      --line: rgba(200, 240, 222, .16);
+      --shadow: 0 26px 80px rgba(0, 0, 0, .35);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--paper);
+      background:
+        radial-gradient(circle at 85% 8%, rgba(56, 231, 160, .13), transparent 28rem),
+        radial-gradient(circle at 10% 42%, rgba(242, 203, 104, .08), transparent 24rem),
+        var(--ink);
+      font-family: Inter, "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+      line-height: 1.75;
+      font-size: 16px;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; }
+    button, input { font: inherit; }
+    .wrap { width: min(1120px, calc(100% - 40px)); margin-inline: auto; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .55rem;
+      color: var(--mint);
+      font-size: .82rem;
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { content: ""; width: 28px; height: 1px; background: currentColor; }
+    .section { padding: 108px 0; }
+    .section-head { max-width: 780px; margin-bottom: 46px; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1, h2, h3 { line-height: 1.28; letter-spacing: -.035em; }
+    h1 { font-size: clamp(2.7rem, 6.8vw, 5.6rem); margin: 20px 0 28px; }
+    h2 { font-size: clamp(2rem, 4vw, 3.65rem); margin: 16px 0 22px; }
+    h3 { font-size: 1.28rem; }
+    .lead { color: #c7d4cf; font-size: clamp(1.05rem, 1.6vw, 1.25rem); max-width: 760px; }
+    .accent { color: var(--mint); }
+    .gold { color: var(--gold); }
+    .muted { color: var(--muted); }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid rgba(255,255,255,.07);
+      background: rgba(7, 17, 15, .86);
+      backdrop-filter: blur(18px);
+    }
+    .nav { min-height: 70px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 900; letter-spacing: -.02em; text-decoration: none; min-width: 0; }
+    .brand-mark { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 9px; background: var(--mint); color: var(--ink); }
+    .brand-copy { display: grid; line-height: 1.08; }
+    .brand-main { font-size: .95rem; white-space: nowrap; }
+    .brand-sub { margin-top: 3px; color: var(--muted); font-size: .65rem; font-weight: 750; letter-spacing: .04em; }
+    .nav-links { display: flex; align-items: center; gap: 24px; font-size: .9rem; color: #c8d7d1; }
+    .nav-links a { text-decoration: none; }
+    .nav-cta { padding: 9px 15px; border: 1px solid rgba(56,231,160,.45); border-radius: 999px; color: var(--mint) !important; font-weight: 800; }
+
+    .hero { min-height: calc(100vh - 70px); display: grid; align-items: center; padding: 88px 0 72px; position: relative; }
+    .hero-grid { display: grid; grid-template-columns: 1.12fr .88fr; gap: 68px; align-items: center; }
+    .hero h1 span { display: block; }
+    .hero-copy { max-width: 700px; }
+    .hero-copy .lead { margin-bottom: 34px; }
+    .button-row { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex;
+      min-height: 54px;
+      padding: 0 24px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      font-weight: 900;
+      text-decoration: none;
+      transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary { color: #04100d; background: var(--mint); box-shadow: 0 14px 35px rgba(56,231,160,.22); }
+    .btn-secondary { color: var(--paper); border: 1px solid var(--line); background: rgba(255,255,255,.03); }
+    .btn-line { color: white; background: #06c755; box-shadow: 0 14px 35px rgba(6,199,85,.2); }
+    .hero-note { margin: 19px 0 0; color: var(--muted); font-size: .86rem; }
+    .limited-link { display: inline-block; margin-top: 18px; padding: 10px 15px; border: 1px solid rgba(242,203,104,.4); border-radius: 8px; color: var(--gold); font-size: .9rem; font-weight: 800; text-decoration: none; }
+    .limited-link:hover { background: rgba(242,203,104,.08); }
+    .limited-section { background: linear-gradient(135deg,rgba(242,203,104,.06),transparent 65%); }
+    .founder-letter { display: grid; grid-template-columns: .9fr 1.1fr; gap: 48px; padding: clamp(24px,4vw,52px); border: 1px solid rgba(242,203,104,.32); border-radius: 24px; background: #0d201a; }
+    .founder-letter > * { min-width: 0; }
+    .founder-letter h2 { font-size: clamp(2rem,3.7vw,3.3rem); line-height: 1.45; }
+    .founder-letter .eyebrow { color: var(--gold); }
+    .founder-copy { color: #c7d4cf; line-height: 1.95; }
+    .founder-copy p:last-child { margin-bottom: 0; }
+    .founder-copy strong { color: var(--paper); }
+    .limited-policy { margin-top: 28px; padding: 22px; border-left: 3px solid var(--gold); background: rgba(242,203,104,.06); }
+    .limited-policy strong { display: block; margin-bottom: 10px; color: var(--gold); font-size: 1.15rem; }
+    .limited-policy p { margin-bottom: 0; }
+    .limited-note { margin: 18px 0 0; color: var(--muted); font-size: .875rem; }
+
+    .terminal {
+      position: relative;
+      border: 1px solid rgba(56,231,160,.22);
+      border-radius: 26px;
+      background: linear-gradient(145deg, rgba(21, 54, 45, .95), rgba(10, 27, 23, .98));
+      padding: 20px;
+      box-shadow: var(--shadow);
+      transform: none;
+    }
+    .terminal::after { display: none; }
+    .terminal-top { display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: .78rem; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+    .live { display: flex; align-items: center; gap: 6px; color: var(--mint); font-weight: 800; }
+    .live i { width: 7px; height: 7px; border-radius: 50%; background: var(--mint); box-shadow: 0 0 12px var(--mint); }
+    .chart { height: 190px; margin: 20px 0 8px; position: relative; overflow: hidden; border-radius: 14px; background: repeating-linear-gradient(0deg, transparent 0 37px, rgba(255,255,255,.045) 38px), repeating-linear-gradient(90deg, transparent 0 55px, rgba(255,255,255,.04) 56px); }
+    .chart svg { width: 100%; height: 100%; filter: drop-shadow(0 9px 9px rgba(56,231,160,.24)); }
+    .stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .stat { padding: 14px; border-radius: 13px; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.06); }
+    .stat small { display: block; color: var(--muted); }
+    .stat strong { font-size: 1.15rem; }
+
+    .trust { border-block: 1px solid var(--line); background: rgba(255,255,255,.025); }
+    .trust-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
+    .trust-item { padding: 30px 34px; border-right: 1px solid var(--line); }
+    .trust-item:last-child { border-right: 0; }
+    .trust-item strong { display: block; font-size: 1.12rem; margin-bottom: 3px; }
+    .trust-item span { color: var(--muted); font-size: .9rem; }
+
+    .proof-banner {
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      gap: 34px;
+      align-items: center;
+      padding: 34px 38px;
+      margin-bottom: 38px;
+      border: 1px solid rgba(242,203,104,.36);
+      border-radius: 24px;
+      background: linear-gradient(120deg, rgba(242,203,104,.13), rgba(56,231,160,.07));
+    }
+    .proof-banner strong { display: block; font-size: clamp(1.7rem, 3.5vw, 3rem); line-height: 1.35; letter-spacing: -.04em; }
+    .proof-banner p { margin: 0; color: #c9d7d1; }
+    .screen-shell { overflow: hidden; border: 1px solid rgba(255,255,255,.14); border-radius: 24px; background: #070b14; box-shadow: var(--shadow); }
+    .screen-bar { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 13px 17px; border-bottom: 1px solid rgba(255,255,255,.09); background: #101522; color: #98a5bb; font-size: .78rem; }
+    .screen-dots { display: flex; gap: 7px; }
+    .screen-dots i { width: 8px; height: 8px; border-radius: 50%; background: #445067; }
+    .screen-dots i:first-child { background: #f27676; }.screen-dots i:nth-child(2) { background: #f2cb68; }.screen-dots i:last-child { background: #50e3c2; }
+    .screen-caption { margin: 15px 4px 0; color: var(--muted); font-size: .82rem; }
+    .dashboard-preview { padding: 24px; background: radial-gradient(circle at 85% 0, rgba(80,227,194,.08), transparent 28rem), #070b14; }
+    .dash-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 18px; margin-bottom: 20px; }
+    .dash-head h3 { margin: 0; color: #f4f7fb; font-size: 1.5rem; }
+    .dash-head span { color: #50e3c2; font-size: .8rem; font-weight: 800; }
+    .dash-summary { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; margin-bottom: 18px; }
+    .dash-summary div { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px; border: 1px solid #253047; border-radius: 14px; background: #111827; }
+    .dash-summary small { color: #8591a7; }
+    .dash-summary b { color: #50e3c2; }
+    .dash-traders { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 14px; }
+    .dash-trader { min-width: 0; padding: 20px; border: 1px solid #253047; border-radius: 18px; background: linear-gradient(150deg,#111b2b,#0c1220); }
+    .dash-trader-top { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; padding-bottom: 15px; border-bottom: 1px solid #253047; }
+    .dash-trader-id { display: flex; gap: 10px; min-width: 0; }
+    .dash-rank { flex: 0 0 34px; height: 34px; display: grid; place-items: center; border-radius: 10px; background: #151d31; color: #e9eef8; font-weight: 900; }
+    .dash-trader-id strong { display: block; color: #f4f7fb; overflow-wrap: anywhere; }
+    .dash-trader-id small { display: block; color: #7e8ba2; line-height: 1.45; }
+    .dash-main-number { display: block; margin: 18px 0 3px; color: #50e3c2; font-size: clamp(1.55rem,2.6vw,2.35rem); font-weight: 1000; line-height: 1.15; letter-spacing: -.045em; overflow-wrap: anywhere; }
+    .dash-number-label { color: #7e8ba2; font-size: .76rem; }
+    .dash-kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 18px; }
+    .dash-kpis div { min-width: 0; padding: 10px; border-radius: 10px; background: #090f1c; }
+    .dash-kpis small { display: block; color: #728097; font-size: .7rem; }
+    .dash-kpis b { display: block; margin-top: 3px; color: #e9eef8; font-size: .9rem; overflow-wrap: anywhere; }
+    .dash-kpis b.up { color: #50d890; }.dash-kpis b.down { color: #ff7182; }
+    .mechanism-section { border-bottom: 1px solid var(--line); background: linear-gradient(180deg,rgba(56,231,160,.035),transparent); }
+    #how-it-works { scroll-margin-top: 90px; }
+    .mechanism-intro { max-width: 860px; margin-bottom: 28px; padding: 24px; border-left: 3px solid var(--mint); background: rgba(56,231,160,.055); }
+    .mechanism-intro strong { display: block; margin-bottom: 9px; font-size: 1.15rem; }
+    .mechanism-intro p { margin: 0; color: #c7d4cf; }
+    .mechanism-steps { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 18px; margin: 0; padding: 0; list-style: none; }
+    .mechanism-steps li { min-width: 0; padding: 26px; border: 1px solid var(--line); border-radius: 18px; background: var(--ink-2); }
+    .mechanism-step-number { display: inline-block; margin-bottom: 22px; color: var(--mint); font-size: .9rem; font-weight: 800; }
+    .mechanism-steps h3 { margin-bottom: 14px; font-size: 1.2rem; }
+    .mechanism-steps p { margin-bottom: 0; color: #c7d4cf; font-size: 1rem; line-height: 1.9; }
+    .mechanism-example { margin: 26px 0 0; padding: 22px 24px; border-radius: 14px; border: 1px solid rgba(242,203,104,.2); background: rgba(242,203,104,.045); color: #c7d4cf; }
+    .mechanism-example strong { display: block; color: var(--gold); margin-bottom: 8px; }
+    .trader-carousel { min-width: 0; }
+    .carousel-toolbar, .carousel-footer { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .carousel-toolbar { margin-bottom: 18px; }
+    .carousel-toolbar p { margin: 0; color: var(--muted); font-size: .85rem; }
+    .carousel-toolbar strong { color: var(--paper); font-size: 1rem; }
+    .carousel-arrows { display: flex; gap: 8px; flex-shrink: 0; }
+    .carousel-arrow { width: 46px; height: 46px; padding: 0; border: 1px solid var(--line); border-radius: 50%; color: var(--mint); background: var(--panel); font-size: 1.5rem; cursor: pointer; }
+    .carousel-arrow:hover:not(:disabled) { background: var(--panel-2); border-color: var(--mint); }
+    .carousel-arrow:disabled { opacity: .3; cursor: default; }
+    .trader-track { display: flex; gap: 20px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-width: thin; scrollbar-color: #427260 #0c1d19; padding-bottom: 14px; }
+    .trader-page { flex: 0 0 100%; min-width: 0; display: grid; grid-template-columns: minmax(0,1fr); gap: 14px; align-content: start; scroll-snap-align: start; scroll-snap-stop: always; }
+    .record-card { min-width: 0; display: grid; grid-template-columns: minmax(170px,.85fr) minmax(230px,1.1fr) minmax(320px,1.35fr); gap: 14px 24px; align-items: center; padding: 24px; border-radius: 18px; border: 1px solid var(--line); background: linear-gradient(115deg,#17352e,#0c1e1a); }
+    .record-card > * { min-width: 0; }
+    .record-header { display: flex; align-items: center; gap: 12px; }
+    .record-index { flex: 0 0 40px; display: grid; place-items: center; height: 40px; border: 1px solid rgba(56,231,160,.2); border-radius: 12px; background: rgba(56,231,160,.07); color: var(--mint); font-size: .8rem; font-weight: 800; }
+    .record-card h3 { margin: 0 0 5px; font-size: 1.05rem; letter-spacing: 0; }
+    .record-name { color: var(--muted); font-size: .75rem; line-height: 1.5; }
+    .record-value { display: block; color: var(--mint); font-size: clamp(1.65rem,2.9vw,2.5rem); line-height: 1.2; font-weight: 900; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+    .record-value-label { display: block; margin-bottom: 6px; color: var(--muted); font-size: .75rem; }
+    .record-stats { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; margin: 0; }
+    .record-stats div { min-width: 0; padding: 12px 8px; border-radius: 10px; background: rgba(255,255,255,.04); }
+    .record-stats dt { color: var(--muted); font-size: .78rem; }
+    .record-stats dd { margin: 5px 0 0; font-size: 1rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .record-stats .up { color: var(--mint-soft); }
+    .record-stats .down { color: #ff99a3; }
+    .record-stats .unavailable { color: #c4d0ca; font-size: .8rem; }
+    .record-stats .drawdown-high { color: #ff99a3; }
+    .record-period { grid-column: 1 / -1; margin: 0; padding-top: 10px; border-top: 1px solid var(--line); color: var(--muted); font-size: .75rem; }
+    .record-period .review-flag { color: #ffb0b8; margin-left: 12px; }
+    .carousel-footer { margin-top: 14px; }
+    .carousel-status { margin: 0; font-size: .8rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+    .carousel-pages { display: flex; gap: 5px; }
+    .carousel-page-button { width: 36px; height: 40px; padding: 0; border: 1px solid transparent; border-radius: 9px; background: transparent; color: var(--muted); font-size: .8rem; cursor: pointer; }
+    .carousel-page-button[aria-current="true"] { border-color: rgba(56,231,160,.3); background: rgba(56,231,160,.1); color: var(--mint); font-weight: 900; }
+    .carousel-arrow:focus-visible, .carousel-page-button:focus-visible, .trader-track:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+    .records-context { margin: -18px 0 24px; padding: 14px 18px; border-left: 2px solid var(--gold); background: rgba(242,203,104,.05); color: #c7d4cf; font-size: .84rem; }
+    .record-method { margin-top: 18px; color: var(--muted); font-size: .8rem; }
+    .record-method summary { padding: 12px 0; color: var(--mint-soft); font-size: .85rem; }
+    .record-method p { padding: 12px 0 0; margin: 0; }
+    .data-note { margin-top: 18px; color: var(--muted); font-size: .8rem; }
+    .membership-extra { margin-top: 20px; padding: 18px; border-radius: 14px; background: rgba(7,17,15,.06); border: 1px solid rgba(7,17,15,.13); }
+    .membership-extra strong { display: block; margin-bottom: 5px; }
+    .trial-flow { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; counter-reset: trial; }
+    .trial-step { counter-increment: trial; padding: 26px 22px; border-radius: 18px; border: 1px solid var(--line); background: linear-gradient(150deg,var(--panel),#0b1b17); }
+    .trial-step::before { content: counter(trial); display: grid; place-items: center; width: 34px; height: 34px; margin-bottom: 25px; border-radius: 50%; background: var(--mint); color: var(--ink); font-weight: 1000; }
+    .trial-step p { margin-bottom: 0; color: var(--muted); }
+    .cancel-note { margin-top: 24px; padding: 25px; border: 1px solid rgba(56,231,160,.25); border-radius: 18px; background: rgba(56,231,160,.07); }
+    .cancel-note strong { display: block; color: var(--mint); font-size: 1.25rem; margin-bottom: 7px; }
+
+    .problem { background: linear-gradient(180deg, rgba(255,255,255,.015), transparent); }
+    .problem-grid { display: grid; grid-template-columns: .82fr 1.18fr; gap: 56px; align-items: start; }
+    .quote { position: sticky; top: 110px; font-size: clamp(1.6rem, 3vw, 2.5rem); font-weight: 900; line-height: 1.5; letter-spacing: -.04em; }
+    .story { display: grid; gap: 18px; }
+    .story-card { padding: 28px; border-radius: var(--radius); border: 1px solid var(--line); background: rgba(255,255,255,.025); }
+    .story-card b { color: var(--gold); }
+
+    .compare { overflow: hidden; border: 1px solid var(--line); border-radius: 24px; background: var(--ink-2); }
+    .compare-row { display: grid; grid-template-columns: .72fr 1fr 1fr; }
+    .compare-row > div { padding: 22px 24px; border-bottom: 1px solid var(--line); }
+    .compare-row > div + div { border-left: 1px solid var(--line); }
+    .compare-row:last-child > div { border-bottom: 0; }
+    .compare-head { font-weight: 900; background: rgba(255,255,255,.035); }
+    .compare-head .new { color: var(--mint); }
+    .compare-label { color: var(--muted); font-size: .9rem; }
+
+    .flow-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; counter-reset: step; }
+    .flow-card { counter-increment: step; padding: 30px; min-height: 310px; border-radius: var(--radius); background: linear-gradient(160deg, var(--panel), #0c201b); border: 1px solid var(--line); }
+    .flow-card::before { content: "0" counter(step); display: block; color: var(--mint); font-size: .82rem; font-weight: 900; letter-spacing: .14em; margin-bottom: 60px; }
+    .flow-card p { color: var(--muted); }
+    .tag-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+    .tag { padding: 5px 10px; border-radius: 999px; background: rgba(56,231,160,.09); color: var(--mint-soft); font-size: .78rem; }
+
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .mode-card { padding: 36px; border-radius: var(--radius); border: 1px solid var(--line); background: rgba(255,255,255,.025); }
+    .mode-card.featured { background: linear-gradient(145deg, rgba(56,231,160,.13), rgba(17,40,35,.76)); border-color: rgba(56,231,160,.28); }
+    .mode-icon { width: 48px; height: 48px; display: grid; place-items: center; border-radius: 13px; color: var(--ink); background: var(--mint); font-weight: 1000; margin-bottom: 26px; }
+    .check-list { padding: 0; margin: 24px 0 0; list-style: none; }
+    .check-list li { position: relative; padding: 10px 0 10px 30px; border-top: 1px solid var(--line); }
+    .check-list li::before { content: "✓"; position: absolute; left: 2px; color: var(--mint); font-weight: 900; }
+
+    .calculator { display: grid; grid-template-columns: .9fr 1.1fr; gap: 24px; padding: 34px; border: 1px solid rgba(242,203,104,.25); border-radius: 26px; background: linear-gradient(135deg, #172820, #10221d); box-shadow: var(--shadow); }
+    .calc-control { display: grid; align-content: center; }
+    .calc-control label { font-weight: 800; margin-bottom: 14px; }
+    input[type="range"] { width: 100%; accent-color: var(--mint); }
+    .profit-value { font-size: clamp(2.3rem, 5vw, 4.2rem); font-weight: 1000; line-height: 1.2; margin: 8px 0 20px; letter-spacing: -.05em; }
+    .calc-results { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .calc-box { min-height: 190px; padding: 25px; border-radius: 18px; background: rgba(255,255,255,.04); border: 1px solid var(--line); }
+    .calc-box.highlight { background: var(--mint); color: var(--ink); border-color: var(--mint); }
+    .calc-box small { display: block; opacity: .72; }
+    .calc-box strong { display: block; font-size: clamp(1.7rem, 3vw, 2.7rem); margin: 14px 0 10px; letter-spacing: -.04em; }
+    .calc-foot { grid-column: 1 / -1; color: var(--muted); font-size: .8rem; margin: 4px 0 0; }
+
+    .pricing-wrap { display: grid; grid-template-columns: .9fr 1.1fr; gap: 48px; align-items: center; }
+    .price-card { position: relative; padding: 40px; border-radius: 28px; background: var(--paper); color: var(--ink); box-shadow: var(--shadow); }
+    .trial-badge { position: absolute; top: -16px; right: 24px; padding: 9px 14px; border-radius: 999px; background: var(--gold); color: #211a06; font-weight: 1000; font-size: .84rem; }
+    .price { margin: 24px 0 8px; font-size: clamp(3.1rem, 6vw, 5rem); font-weight: 1000; letter-spacing: -.07em; line-height: 1; }
+    .price small { font-size: 1rem; letter-spacing: 0; }
+    .price-card .check-list li { border-color: rgba(7,17,15,.12); }
+    .price-card .btn { width: 100%; margin-top: 24px; background: var(--ink); color: white; }
+    .code-box { margin-top: 17px; padding: 13px; text-align: center; border: 1px dashed rgba(7,17,15,.28); border-radius: 11px; font-size: .86rem; }
+
+    .faq { display: grid; gap: 10px; }
+    details { border: 1px solid var(--line); border-radius: 16px; background: rgba(255,255,255,.025); }
+    summary { padding: 22px 55px 22px 24px; cursor: pointer; font-weight: 850; position: relative; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { content: "+"; position: absolute; right: 23px; top: 18px; color: var(--mint); font-size: 1.5rem; }
+    details[open] summary::after { content: "−"; }
+    details p { padding: 0 24px 22px; color: var(--muted); }
+    #faq, #limited-access, #faq-funds, #faq-environment, #faq-membership, #track-records { scroll-margin-top: 95px; }
+    .faq-nav { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 32px; }
+    .faq-nav a { padding: 10px 15px; border: 1px solid var(--line); border-radius: 8px; color: var(--mint-soft); text-decoration: none; }
+    .faq-group + .faq-group { margin-top: 42px; }
+    .faq-group > h3 { color: var(--mint-soft); }
+    .faq-answer { padding: 0 24px 24px; color: #b8c9c1; line-height: 1.85; }
+    .faq-answer p { padding: 0; margin: 0 0 16px; color: inherit; }
+    .faq-answer p:last-child { margin-bottom: 0; }
+    .faq-answer strong { color: var(--paper); }
+    .faq-answer a { color: var(--mint-soft); text-underline-offset: 4px; }
+    .faq-answer ul { margin: 0 0 18px; padding-left: 1.3em; }
+    .faq-answer li + li { margin-top: 8px; }
+    .faq-answer .faq-note { font-size: .875rem; color: var(--muted); }
+    .faq-example { margin: 20px 0; padding: clamp(14px,3vw,22px); border-radius: 12px; background: #091813; border: 1px solid var(--line); }
+    .faq-table { width: 100%; margin: 16px 0; border-collapse: collapse; font-size: .9rem; font-variant-numeric: tabular-nums; }
+    .faq-table th, .faq-table td { padding: 12px 8px; border-bottom: 1px solid var(--line); text-align: left; overflow-wrap: anywhere; }
+    .faq-table th { color: var(--mint-soft); font-weight: 700; }
+    .faq-table caption { text-align: left; margin-bottom: 8px; font-weight: 700; color: var(--paper); }
+    summary:focus-visible, .faq-nav a:focus-visible, .limited-link:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+
+    .risk { padding: 34px; border-radius: 20px; background: #0a1613; border: 1px solid var(--line); color: #aebeb8; font-size: .84rem; }
+    .risk h3 { color: var(--paper); font-size: 1rem; }
+    footer { padding: 38px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: .83rem; }
+    .footer-row { display: flex; justify-content: space-between; gap: 30px; }
+
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    @media (max-width: 900px) {
+      .hero-grid, .problem-grid, .calculator, .pricing-wrap, .proof-banner { grid-template-columns: 1fr; }
+      .hero { min-height: auto; }
+      .terminal { max-width: 600px; }
+      .quote { position: static; }
+      .flow-grid, .trial-flow, .mechanism-steps { grid-template-columns: 1fr; }
+      .record-card { grid-template-columns: minmax(0,1fr) minmax(0,1fr); }
+      .record-stats { grid-column: 1 / -1; }
+      .dash-traders { grid-template-columns: 1fr; }
+      .founder-letter { grid-template-columns: 1fr; gap: 20px; }
+      .flow-card { min-height: 0; }
+      .flow-card::before { margin-bottom: 28px; }
+      .nav-links a:not(.nav-cta) { display: none; }
+    }
+
+    @media (max-width: 680px) {
+      .wrap { width: min(100% - 28px, 1120px); }
+      .section { padding: 78px 0; }
+      .hero { padding-top: 54px; }
+      h1 { font-size: clamp(2.5rem, 13vw, 4rem); }
+      .hero-grid { gap: 46px; }
+      .button-row .btn { width: 100%; }
+      .trust-grid { grid-template-columns: 1fr; }
+      .trust-item { border-right: 0; border-bottom: 1px solid var(--line); padding-inline: 0; }
+      .trust-item:last-child { border-bottom: 0; }
+      .split, .calc-results { grid-template-columns: 1fr; }
+      .compare { overflow-x: auto; }
+      .compare-row { min-width: 700px; }
+      .calculator, .price-card { padding: 26px 20px; }
+      .footer-row { display: grid; }
+      .brand-main { font-size: .82rem; }
+      .brand-sub { font-size: .58rem; }
+      .nav { gap: 8px; }
+      .nav-cta { padding: 8px 12px; font-size: .82rem; white-space: nowrap; }
+      .proof-banner { padding: 25px 20px; }
+      .dashboard-preview { padding: 16px; }
+      .screen-bar span:nth-child(2) { text-align: center; }
+      .screen-bar span:last-child { display: none; }
+      .dash-head { align-items: flex-start; flex-direction: column; }
+      .dash-summary { grid-template-columns: 1fr; }
+      .dash-trader { padding: 17px; }
+      .dash-main-number { font-size: clamp(1.85rem,9vw,2.6rem); }
+      .terminal { padding: 18px 16px; }
+      .record-card { grid-template-columns: minmax(0,1fr); gap: 14px; padding: 18px 16px; }
+      .record-value { font-size: clamp(1.75rem,8vw,2.3rem); }
+      .record-card h3 { font-size: 1.1rem; margin-bottom: 3px; }
+      .record-name { font-size: .75rem; }
+      .record-stats { gap: 6px; }
+      .record-stats div { padding: 10px 7px; }
+      .record-stats dd { font-size: .95rem; }
+      .record-stats dt { font-size: .78rem; }
+      .record-period .review-flag { display: block; margin-left: 0; }
+      .carousel-toolbar strong { font-size: .9rem; }
+      .carousel-toolbar p { font-size: .75rem; }
+      .carousel-footer { flex-direction: column; gap: 8px; }
+      .carousel-page-button { width: 44px; height: 44px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .reveal { opacity: 1; transform: none; transition: none; }
+      .btn { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <a class="brand" href="#top" aria-label="Million Trader Watch Copy &amp; Signals トップへ">
+        <span class="brand-mark">↗</span><span class="brand-copy"><span class="brand-main">Million Trader Watch</span><span class="brand-sub">Copy &amp; Signals</span></span>
+      </a>
+      <nav class="nav-links" aria-label="主要メニュー">
+        <a href="#how-it-works">仕組み</a>
+        <a href="#use">使い方</a>
+        <a href="#price">料金</a>
+        <a href="#faq">Q&amp;A</a>
+        <a class="nav-cta" href="#line-flow">7日間無料</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow">世界の高収益トレーダーをリアルタイム監視</span>
+          <h1><span>世界の億トレーダーの売買を、</span><span class="accent">こっそり覗く。</span></h1>
+          <p class="lead">どこで入り、どこで利益を確定し、どこで損切りしたのか。Million Trader Watch Copy &amp; Signalsなら、実際に結果を残してきたトレーダーの売買がリアルタイムで分かります。対応銘柄はMT5へ自動コピー。それ以外の取引もDiscordで受け取れます。</p>
+          <div class="button-row">
+            <a class="btn btn-line" href="#line-flow">LINEで7日間無料体験を申し込む</a>
+            <a class="btn btn-secondary" href="#actual-screen">実際の画面を見る</a>
+          </div>
+          <p class="hero-note">メンバーシップ加入前に7日間無料 / 気に入った場合のみ月額14,900円 / 1か月単位で停止可能</p>
+          <a class="limited-link" href="#limited-access">人数を絞って提供します。その理由はこちら</a>
+        </div>
+
+        <div class="terminal" aria-label="トレーダー分析画面のイメージ">
+          <div class="terminal-top"><span>登録トレーダーの損益</span><span class="live"><i></i>2026年9月 保存分</span></div>
+          <div style="padding:24px 4px 10px">
+            <small class="muted">登録15人で最大の公開累計損益 / Trader 11</small>
+            <strong style="display:block;color:var(--mint);font-size:clamp(2rem,5vw,3.4rem);line-height:1.15;letter-spacing:-.06em;margin:5px 0 22px">+$33,604,950</strong>
+            <small class="muted">公開口座全体の累計利益率は+239.8%。直近1か月は−17.3%でした。過去の参考実績であり、利用者の利益を示すものではありません。<a href="#track-records">15人全員のデータを見る →</a></small>
+          </div>
+          <div class="stat-grid">
+            <div class="stat"><small>登録数</small><strong>15名</strong></div>
+            <div class="stat"><small>登録上限</small><strong>最大30名</strong></div>
+            <div class="stat"><small>分析</small><strong>利益率・DD・勝率</strong></div>
+            <div class="stat"><small>連携</small><strong>MT5・Discord</strong></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="trust">
+      <div class="wrap trust-grid">
+        <div class="trust-item"><strong>利益が増えても月額は同じ</strong><span>成果報酬はかかりません</span></div>
+        <div class="trust-item"><strong>自動コピーと通知に対応</strong><span>使いたい機能だけ選べます</span></div>
+        <div class="trust-item"><strong>7日間、実際に試せる</strong><span>専用の無料体験コードを配布</span></div>
+      </div>
+    </section>
+
+    <section class="section mechanism-section" id="how-it-works" aria-labelledby="mechanism-title">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow">他人の売買がわかる理由</span>
+          <h2 id="mechanism-title">売買の記録が公開されている。<br><span class="accent">だから、その動きを追える。</span></h2>
+          <p class="lead">実は、一部の取引所では、口座を見分けるための「公開用の番号」があります。この番号をたどると、その口座が何を買い、いつ売ったのかといった記録を、誰でも確認できる場合があります。</p>
+        </div>
+        <div class="mechanism-intro"><strong>イメージは、誰でも読める「売買の記録帳」です。</strong><p>ここでいう番号は、住所や本名ではありません。取引口座を見分けるためのもので、一般に「アドレス」と呼ばれます。Million Trader Watchは、この公開されている記録を利用しています。</p></div>
+        <ol class="mechanism-steps">
+          <li><span class="mechanism-step-number" aria-hidden="true">01</span><h3>過去の記録を調べる</h3><p>僕が公開データから候補を調べ、どのくらい利益や損失が出ているか、どんな取引をしているかを確認します。掲載している数字も、こうした公開データをもとに整理したものです。</p></li>
+          <li><span class="mechanism-step-number" aria-hidden="true">02</span><h3>新しい売買を読み取る</h3><p>監視しているトレーダーが新しく買ったり、持っていた分を売ったりすると、その記録をツールが読み取ります。本人から毎回、売買の連絡をもらう必要はありません。</p></li>
+          <li><span class="mechanism-step-number" aria-hidden="true">03</span><h3>通知や自動コピーに使う</h3><p>読み取った売買をDiscordに通知。MT5で取引できる銘柄は、自分で決めた数量や上限に合わせて自動コピーすることもできます。</p></li>
+        </ol>
+        <p class="mechanism-example"><strong>たとえば、監視中の人がビットコインを買ったら。</strong>ツールがその記録を読み取り、あなたに通知します。MT5コピーを設定していれば、自分の口座にも注文を送る。この流れを自動で行うのが、Million Trader Watchです。</p>
+        <p class="data-note">記録の反映・通信・注文には時間差があります。コピー元と同じ価格や損益になるとは限りません。</p>
+      </div>
+    </section>
+
+    <section class="section" id="actual-screen">
+      <div class="wrap">
+        <div class="proof-banner reveal">
+          <strong>どんな画面で、<br><span class="accent">何を確認できるのか。</span></strong>
+          <p>損益や履歴を確かめてから、追いかけるトレーダーを選ぶ。実際の管理画面で確認できる内容を、スマホでも読みやすい形で紹介しています。通知とMT5コピーは、トレーダーごとに切り替えられます。</p>
+        </div>
+        <div class="screen-shell">
+          <div class="screen-bar"><span class="screen-dots"><i></i><i></i><i></i></span><span>Million Trader Watch Copy &amp; Signals 管理画面の表示例</span><span>PERFORMANCE</span></div>
+          <div class="dashboard-preview">
+            <div class="dash-head"><div><span>TRADER PERFORMANCE</span><h3>注目トレーダー3人</h3></div><span>2026年9月 保存分 / 参考実績</span></div>
+            <div class="dash-summary"><div><small>売買通知</small><b>3名を通知</b></div><div><small>MT5コピー</small><b>3名をコピー</b></div></div>
+            <div class="dash-traders">
+              <article class="dash-trader" data-featured-trader="T01"><div class="dash-trader-top"><div class="dash-trader-id"><span class="dash-rank">01</span><span><strong>T01｜ZEC・BTC</strong><small>累計利益額に注目</small></span></div></div><strong class="dash-main-number">+$22,385,390</strong><span class="dash-number-label">公開口座の累計損益（USD）</span><div class="dash-kpis"><div><small>累計利益率</small><b class="up">+510.5%</b></div><div><small>直近1か月</small><b class="up">+3,741%</b></div><div><small>直近1週間</small><b class="up">+142.6%</b></div><div><small>確認できた履歴</small><b>21.4か月</b></div></div></article>
+              <article class="dash-trader" data-featured-trader="T02"><div class="dash-trader-top"><div class="dash-trader-id"><span class="dash-rank">02</span><span><strong>T02｜BTC・HYPE</strong><small>利益額・累計利益率に注目</small></span></div></div><strong class="dash-main-number">+$20,857,088</strong><span class="dash-number-label">公開口座の累計損益（USD）</span><div class="dash-kpis"><div><small>累計利益率</small><b class="up">+15,470%</b></div><div><small>直近1か月</small><b class="up">+135.4%</b></div><div><small>直近1週間</small><b class="up">+48.5%</b></div><div><small>確認できた履歴</small><b>32.5か月</b></div></div></article>
+              <article class="dash-trader" data-featured-trader="T06"><div class="dash-trader-top"><div class="dash-trader-id"><span class="dash-rank">06</span><span><strong>T06｜HYPE・ETH</strong><small>累計利益率に注目</small></span></div></div><strong class="dash-main-number">+$997,388</strong><span class="dash-number-label">公開口座の累計損益（USD）</span><div class="dash-kpis"><div><small>累計利益率</small><b class="up">+15,678%</b></div><div><small>直近1か月</small><b class="up">+132.6%</b></div><div><small>直近1週間</small><b class="up">+20.2%</b></div><div><small>確認できた履歴</small><b>19.1か月</b></div></div></article>
+            </div>
+          </div>
+        </div>
+        <p class="screen-caption">※登録15人から、保存時点で直近1か月・1週間がともにプラスで、累計利益額や利益率の高い3人を抜粋しています。金額・利益率は保存済みの公開口座成績です。管理画面はLP用の表示例で、通知・コピーの人数は設定例です。「直近」は保存時点を指します。</p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="traders-heading">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow" id="track-records">登録トレーダー15人の実績一覧</span>
+          <h2 id="traders-heading">気になるのは、<br><span class="accent">「誰の売買を追えるのか」。</span></h2>
+          <p class="lead">その答えを、15人分の数字で。累計の損益に加え、直近1か月・1週間の利益率も掲載しました。長く積み上げた成績と最近の調子を、3人ずつ見比べてみてください。</p>
+        </div>
+        <p class="records-context">数字は、2026年9月の調査時に保存した公開口座の参考実績です。「直近」は保存時点を指し、1か月の利益率は平均月利ではありません。コピー対象外の銘柄などを含む場合があります。</p>
+        <div class="trader-carousel" role="region" aria-roledescription="カルーセル" aria-label="登録トレーダー15人の紹介">
+          <div class="carousel-toolbar">
+            <div><strong>全15人を、3人ずつご紹介。</strong><p id="trader-slide-help">左右にスワイプ、または矢印で次の3人へ</p></div>
+            <div class="carousel-arrows">
+              <button class="carousel-arrow" id="trader-prev" type="button" aria-label="前の3人を見る" aria-controls="trader-track" disabled>←</button>
+              <button class="carousel-arrow" id="trader-next" type="button" aria-label="次の3人を見る" aria-controls="trader-track">→</button>
+            </div>
+          </div>
+          <div class="trader-track" id="trader-track" tabindex="0" aria-label="トレーダー紹介。左右の矢印キーでも移動できます" aria-describedby="trader-slide-help">
+          <div class="trader-page" role="group" aria-roledescription="スライド" aria-label="1 / 5ページ：トレーダー1〜3">
+            <article class="record-card" data-trader="T01" aria-labelledby="trader-T01">
+              <div class="record-header"><span class="record-index" aria-hidden="true">01</span><div><h3 id="trader-T01">Trader 01</h3><div class="record-name">取引銘柄例：ZEC・BTC・ETH</div></div></div>
+              <div><span class="record-value-label">公開口座の累計損益（USD）</span><strong class="record-value">+$22,385,390</strong></div>
+              <dl class="record-stats"><div><dt>累計利益率</dt><dd class="up">+510.5%</dd></div><div><dt>直近1か月</dt><dd class="up">+3,741%</dd></div><div><dt>直近1週間</dt><dd class="up">+142.6%</dd></div><div><dt>確認できた履歴</dt><dd>21.4か月</dd></div></dl>
+              <p class="record-period">口座履歴の観測期間：2024/12/05〜2026/09/19</p>
+            </article>
+            <article class="record-card" data-trader="T02" aria-labelledby="trader-T02">
+              <div class="record-header"><span class="record-index" aria-hidden="true">02</span><div><h3 id="trader-T02">Trader 02</h3><div class="record-name">取引銘柄例：BTC・HYPE・ETH</div></div></div>
+              <div><span class="record-value-label">公開口座の累計損益（USD）</span><strong class="record-value">+$20,857,088</strong></div>
+              <dl class="record-stats"><div><dt>累計利益率</dt><dd class="up">+15,470%</dd></div><div><dt>直近1か月</dt><dd class="up">+135.4%</dd></div><div><dt>直近1週間</dt><dd class="up">+48.5%</dd></div><div><dt>確認できた履歴</dt><dd>32.5か月</dd></div></dl>
+              <p class="record-period">口座履歴の観測期間：2024/01/04〜2026/09/19</p>
+            </article>
+            <article class="record-card" data-trader="T03" aria-labelledby="trader-T03">
+              <div class="record-header"><span class="record-index" aria-hidden="true">03</span><div><h3 id="trader-T03">Trader 03</h3><div class="record-name">取引銘柄例：BTC・XRP</div></div></div>
+              <div><span class="record-value-label">公開口座の累計損益（USD）</span><strong class="record-value">+$183,508</strong></div>
+              <dl class="record-stats"><div><dt>累計利益率</dt><dd class="up">+921.3%</dd></div><div><dt>直近1か月</dt><dd class="up">+547.1%</dd></div><div><dt>直近1週間</dt><dd class="down">−19.0%</dd></div><div><dt>確認できた履歴</dt><dd>7.4か月</dd></div></dl>
+              <p class="record-period">口座履歴の観測期間：2026/02/05〜2026/09/19</p>
+            </article>
+          </div>
+          <div class="trader-page" role="group" aria-roledescription="スライド" aria-label="2 / 5ページ：トレーダー4〜6">
+            <article class="record-card" data-trader="T04" aria-labelledby="trader-T04">
+              <div class="record-header"><span class="record-index" aria-hidden="true">04</span><div><h3 id="trader-T04">Trader 04</h3><div class="record-name">取引銘柄例：BTC・ETH</div></div></div>
+              <div><span class="record-value-label">公開口座の累計損益（USD）</span><strong class="record-value">+$5,542,361</strong></div>
+              <dl class="record-stats"><div><dt>累計利益率</dt><dd class="up">+841.1%</dd></div><div><dt>直近1か月</dt><dd class="up">+157.4%</dd></div><div><dt>直近1週間</dt><dd class="down">−9.5%</dd></div><div><dt>確認できた履歴</dt><dd>4.2か月</dd></div></dl>
+              <p class="record-period">口座履歴の観測期間：2026/05/14〜2026/09/19</p>
+            </article>
+            <article class="record-card" data-trader="T05" aria-labelledby="trader-T05">
+              <div class="record-header"><span class="record-index" aria-hidden="true">05</span><div><h3 id="trader-T05">Trader 05</h3><div class="record-name">取引銘柄例：BTC・ETH・SOL</div></div></div>
+              <div><span class="record-value-label">公開口座の累計損益（USD）</span><strong class="record-value">+$472,413</strong></div>
+              <dl class="record-stats"><div><dt>累計利益率</dt><dd class="up">+44.3%</dd></div><div><dt>直近1か月</dt><dd class="up">+38.2%</dd></div><div><dt>直近1週間</dt><dd class="up">+6.2%</dd></div><div><dt>確認できた履歴</dt><dd>5.4か月</dd></div></dl>
+              <p class="record-period">口座履歴の観測期間：2026/04/09〜2026/09/19</p>
+            </article>
+            <article class="record-card" data-trader="T06" aria-labelledby="trader-T06">
+              <div class="record-header"><span class="record-index" aria-hidden="true">06</span><div><h3 id="trader-T06">Trader 06</h3><div class="record-name">取引銘柄例：HYPE・ETH</div></div></div>
+              <div><span class="record-value-label">公開口座の累計損益（USD）</span><strong class="record-value">+$997,388</strong></div>
+              <dl class="record-stats"><div><dt>累計利益率</dt><dd class="up">+15,678%</dd></div><div><dt>直近1か月</dt><dd class="up">+132.6%</dd></div><div><dt>直近1週間</dt><dd class="up">+20.2%</dd></div><div><dt>確認できた履歴</dt><dd>19.1か月</dd></div></dl>
+              <p class="record-period">口座履歴の観測期間：2025/02/13〜2026/09/19</p>
+            </article>
+          </div>
+          <div class="trader-page" role="group" aria-roledescription="スライド" aria-label="3 / 5ページ：トレーダー7〜9">
+            <article class="record-card" data-trader="T07" aria-labelledby="trader-T07">
+              <div class="record-header"><span class="record-index" aria-hidden="true">07</span><div><h3 id="trader-T07">Trader 07</h3><div class="record-name">取引銘柄例：BTC・ETH・HYPE・XRP</div></div></div>
+              <div><span class="record-value-label">公開口座の累計損益（USD）</span><strong class="record-value">+$258,719</strong></div>
+              <dl class="record-stats"><div><dt>累計利益率</dt><dd class="up">+49.9%</dd></div><div><dt>直近1か月</dt><dd class="up">+28.2%</dd></div><div><dt>直近1週間</dt><dd class="up">+2.5%</dd></div><div><dt>確認できた履歴</dt><dd>4.4か月</dd></div></dl>
+              <p class="record-period">口座履歴の観測期間：2026/05/07〜2026/09/19 <span>先物履歴の参考DD：約18.8%</span></p>
+            </article>
+            <article class="record-card" data-trader="T08" aria-labelledby="trader-T08">
+              <div class="record-header"><span class="record-index" aria-hidden="true">08</span><div><h3 id="trader-T08">Trader 08</h3><div class="record-name">取引銘柄例：BTC・ETH・XRP・ONDO</div></div></div>
+              <div><span class="record-value-label">公開口座の累計損益（USD）</span><strong class="record-value">+$105,306</strong></div>
+              <dl class="record-stats"><div><dt>累計利益率</dt><dd class="up">+425.6%</dd></div><div><dt>直近1か月</dt><dd class="up">+204.6%</dd></div><div><dt>直近1週間</dt><dd class="up">+34.6%</dd></div><div><dt>確認できた履歴</dt><dd>32.9か月</dd></div></dl>
+              <p class="record-period">口座履歴の観測期間：2023/12/21〜2026/09/19 <span class="review-flag">先物履歴の参考DD：約96.5%・大きな資産減少を観測</span></p>
+            </article>
+            <article class="record-card" data-trader="T09" aria-labelledby="trader-T09">
+              <div class="record-header"><span class="record-index" aria-hidden="true">09</span><div><h3 id="trader-T09">Trader 09</h3><div class="record-name">取引銘柄例：HYPE・SOL・ZEC・LIT</div></div></div>
+              <div><span class="record-value-label">公開口座の累計損益（USD）</span><strong class="record-value">+$248,154</strong></div>
+              <dl class="record-stats"><div><dt>累計利益率</dt><dd class="up">+422.3%</dd></div><div><dt>直近1か月</dt><dd class="up">+111.8%</dd></div><div><dt>直近1週間</dt><dd class="up">+15.9%</dd></div><div><dt>確認できた履歴</dt><dd>19.8か月</dd></div></dl>
+              <p class="record-period">口座履歴の観測期間：2025/01/23〜2026/09/19</p>
+            </article>
+          </div>
+          <div class="trader-page" role="group" aria-roledescription="スライド" aria-label="4 / 5ページ：トレーダー10〜12">
+            <article class="record-card" data-trader="T10" aria-labelledby="trader-T10">
+              <div class="record-header"><span class="record-index" aria-hidden="true">10</span><div><h3 id="trader-T10">Trader 10</h3><div class="record-name">取引銘柄例：BTC・ETH・ZEC</div></div></div>
+              <div><span class="record-value-label">公開口座の累計損益（USD）</span><strong class="record-value">+$231,513</strong></div>
+              <dl class="record-stats"><div><dt>累計利益率</dt><dd class="up">+1,048%</dd></div><div><dt>直近1か月</dt><dd class="up">+74.4%</dd></div><div><dt>直近1週間</dt><dd class="up">+4.3%</dd></div><div><dt>確認できた履歴</dt><dd>21.0か月</dd></div></dl>
+              <p class="record-period">口座履歴の観測期間：2024/12/19〜2026/09/19</p>
+            </article>
+            <article class="record-card" data-trader="T11" aria-labelledby="trader-T11">
+              <div class="record-header"><span class="record-index" aria-hidden="true">11</span><div><h3 id="trader-T11">Trader 11</h3><div class="record-name">取引銘柄例：BTC・ENA・ETH</div></div></div>
+              <div><span class="record-value-label">公開口座の累計損益（USD）</span><strong class="record-value">+$33,604,950</strong></div>
+              <dl class="record-stats"><div><dt>累計利益率</dt><dd class="up">+239.8%</dd></div><div><dt>直近1か月</dt><dd class="down">−17.3%</dd></div><div><dt>直近1週間</dt><dd class="down">−2.8%</dd></div><div><dt>確認できた履歴</dt><dd>13.9か月</dd></div></dl>
+              <p class="record-period">口座履歴の観測期間：2025/07/24〜2026/09/19</p>
+            </article>
+            <article class="record-card" data-trader="T12" aria-labelledby="trader-T12">
+              <div class="record-header"><span class="record-index" aria-hidden="true">12</span><div><h3 id="trader-T12">Trader 12</h3><div class="record-name">取引銘柄例：BTC・ETH・HYPE・ZEC</div></div></div>
+              <div><span class="record-value-label">公開口座の累計損益（USD）</span><strong class="record-value">+$6,700,380</strong></div>
+              <dl class="record-stats"><div><dt>累計利益率</dt><dd class="up">+159.8%</dd></div><div><dt>直近1か月</dt><dd class="up">+82.4%</dd></div><div><dt>直近1週間</dt><dd class="up">+11.1%</dd></div><div><dt>確認できた履歴</dt><dd>5.6か月</dd></div></dl>
+              <p class="record-period">口座履歴の観測期間：2026/04/02〜2026/09/19 <span class="review-flag">先物履歴の参考DD：約74.0%・大きな資産減少を観測</span></p>
+            </article>
+          </div>
+          <div class="trader-page" role="group" aria-roledescription="スライド" aria-label="5 / 5ページ：トレーダー13〜15">
+            <article class="record-card" data-trader="T13" aria-labelledby="trader-T13">
+              <div class="record-header"><span class="record-index" aria-hidden="true">13</span><div><h3 id="trader-T13">Trader 13</h3><div class="record-name">取引銘柄例：HYPE・BTC・ETH・ZEC</div></div></div>
+              <div><span class="record-value-label">公開口座の累計損益（USD）</span><strong class="record-value">+$1,186,854</strong></div>
+              <dl class="record-stats"><div><dt>累計利益率</dt><dd class="up">+133.3%</dd></div><div><dt>直近1か月</dt><dd class="up">+77.1%</dd></div><div><dt>直近1週間</dt><dd class="up">+5.6%</dd></div><div><dt>確認できた履歴</dt><dd>6.5か月</dd></div></dl>
+              <p class="record-period">口座履歴の観測期間：2026/03/05〜2026/09/19</p>
+            </article>
+            <article class="record-card" data-trader="T14" aria-labelledby="trader-T14">
+              <div class="record-header"><span class="record-index" aria-hidden="true">14</span><div><h3 id="trader-T14">Trader 14</h3><div class="record-name">取引銘柄例：BTC・ETH・SOL</div></div></div>
+              <div><span class="record-value-label">公開口座の累計損益（USD）</span><strong class="record-value">+$486,789</strong></div>
+              <dl class="record-stats"><div><dt>累計利益率</dt><dd class="up">+130.4%</dd></div><div><dt>直近1か月</dt><dd class="up">+177.3%</dd></div><div><dt>直近1週間</dt><dd class="up">+20.2%</dd></div><div><dt>確認できた履歴</dt><dd>7.2か月</dd></div></dl>
+              <p class="record-period">口座履歴の観測期間：2026/02/12〜2026/09/19</p>
+            </article>
+            <article class="record-card" data-trader="T15" aria-labelledby="trader-T15">
+              <div class="record-header"><span class="record-index" aria-hidden="true">15</span><div><h3 id="trader-T15">Trader 15</h3><div class="record-name">取引銘柄例：ZEC・BTC・ETH</div></div></div>
+              <div><span class="record-value-label">公開口座の累計損益（USD）</span><strong class="record-value">+$671,372</strong></div>
+              <dl class="record-stats"><div><dt>累計利益率</dt><dd class="up">+576.3%</dd></div><div><dt>直近1か月</dt><dd class="up">+195.6%</dd></div><div><dt>直近1週間</dt><dd class="up">+9.8%</dd></div><div><dt>確認できた履歴</dt><dd>24.0か月</dd></div></dl>
+              <p class="record-period">口座履歴の観測期間：2024/09/19〜2026/09/19</p>
+            </article>
+          </div>
+          </div>
+          <div class="carousel-footer">
+            <p class="carousel-status" id="trader-status" role="status" aria-live="polite" aria-atomic="true">1 / 5ページ · Trader 01–03</p>
+            <nav class="carousel-pages" aria-label="トレーダー紹介のページ">
+              <button class="carousel-page-button" type="button" data-trader-page="0" aria-controls="trader-track" aria-label="1ページ目、トレーダー1〜3" aria-current="true">1</button>
+              <button class="carousel-page-button" type="button" data-trader-page="1" aria-controls="trader-track" aria-label="2ページ目、トレーダー4〜6" aria-current="false">2</button>
+              <button class="carousel-page-button" type="button" data-trader-page="2" aria-controls="trader-track" aria-label="3ページ目、トレーダー7〜9" aria-current="false">3</button>
+              <button class="carousel-page-button" type="button" data-trader-page="3" aria-controls="trader-track" aria-label="4ページ目、トレーダー10〜12" aria-current="false">4</button>
+              <button class="carousel-page-button" type="button" data-trader-page="4" aria-controls="trader-track" aria-label="5ページ目、トレーダー13〜15" aria-current="false">5</button>
+            </nav>
+          </div>
+        </div>
+        <p class="data-note">掲載確認：2026年9月21日。損益はUSD・1ドル単位、利益率は表示桁数に丸めています。コピー元の過去の参考実績であり、本ツール利用者の実績や見込利益ではありません。公開口座の成績とMT5コピーの結果は異なります。</p>
+        <details class="record-method"><summary>参考実績の集計条件を見る</summary>
+          <p>累計損益と累計・1か月・1週間の利益率は、調査時に保存した同じ公開成績データから取り出しています。利益率は公開側の表示値を百分率に直したもので、欠けた期間を独自の推測で埋めた値ではありません。リアルタイムには更新していません。</p>
+          <p>口座全体の成績には、MT5で自動コピーできない銘柄や現物取引などが含まれる場合があります。公開側の集計方法や入出金の扱いを独立に検証できていないため、参考値としてご覧ください。短期間の高い利益率を年利や毎月の期待利回りに読み替えることはできません。</p>
+          <p>履歴期間は、別途取得した口座履歴の観測開始・終了時点です。成績データとは取得時点が異なり、累計利益率の計算対象期間と完全に一致するとは限りません。取引銘柄は確認した例であり、全銘柄の一覧ではありません。</p>
+          <p>Trader 07・08・12に併記したDDは、先物履歴の約7〜14日間隔の観測点を使った概算です。実際の下落を見逃す可能性があり、口座全体の公開成績とは集計範囲が異なります。Trader 08・12では大きな資産減少が確認され、その他のDD未掲載の口座も低リスクと確認できたものではありません。登録15人全員の選定条件への適合確認は完了していません。</p>
+        </details>
+      </div>
+    </section>
+
+    <section class="section problem" id="difference">
+      <div class="wrap problem-grid">
+        <div class="quote reveal">コピートレードで一番怖いのは、<span class="gold">なぜその人が配信しているのか分からないこと</span>です。</div>
+        <div class="story">
+          <div class="story-card reveal"><b>よくある仕組みでは、コピーされること自体が収入になります。</b><br>コピーした人の利益から報酬を受け取ったり、取引量に応じて収益が増えたりする場合、トレーダーには「多くの人にコピーしてもらう理由」があります。実力だけで選ばれているとは限りません。</div>
+          <div class="story-card reveal"><b>Million Trader Watch Copy &amp; Signalsで見るのは、本人の宣伝ではなく、実際の取引履歴です。</b><br>対象となるトレーダーは、自分の資金で普段どおり取引しています。こちらが売買を追っていることを前提に、紹介料を受け取って参加しているわけではありません。だからこそ、余計な宣伝を挟まず、利益率や最大DD、勝率、取引回数などの数字で判断できます。</div>
+          <div class="story-card reveal"><b>成績が落ちれば、監視対象の見直しも行います。</b><br>過去に一度勝っただけの人を、ずっと残す仕組みではありません。取引回数が少なすぎないか、最大DDが大きくなっていないか、トータルで利益が残っているかを確認しながら、利用するトレーダーを選び直します。</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow">一般的なコピー取引との違い</span>
+          <h2>どちらもコピー取引です。<br>ただし、選ばれ方が違います。</h2>
+        </div>
+        <div class="compare reveal" role="table" aria-label="従来型コピー取引との比較">
+          <div class="compare-row compare-head" role="row"><div></div><div>よくあるコピー取引</div><div class="new">Million Trader Watch</div></div>
+          <div class="compare-row" role="row"><div class="compare-label">選定の起点</div><div>ランキングや人気、宣伝</div><div>公開された実取引データ</div></div>
+          <div class="compare-row" role="row"><div class="compare-label">トレーダーの動機</div><div>コピー人数・利益配分が報酬になる場合がある</div><div>紹介目的ではない取引者を分析</div></div>
+          <div class="compare-row" role="row"><div class="compare-label">利用料金</div><div>利益の一部、スプレッド上乗せ等の場合がある</div><div>月額14,900円の固定制</div></div>
+          <div class="compare-row" role="row"><div class="compare-label">使い方</div><div>指定環境でのコピーが中心</div><div>MT5自動コピー / Discord通知</div></div>
+          <div class="compare-row" role="row"><div class="compare-label">リスク調整</div><div>提供条件に依存</div><div>固定ロット・停止・再開を自分で設定</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="use">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow">Million Trader Watch Copy &amp; Signalsでできること</span>
+          <h2>自動で任せたい取引と、<br>自分で判断したい取引を分けられます。</h2>
+          <p class="lead">対応する銘柄はMT5へ自動コピー。自動化したくない銘柄は、Discord通知だけ受け取ることもできます。どちらか一方に決める必要はありません。</p>
+        </div>
+        <div class="flow-grid">
+          <article class="flow-card reveal"><h3>トレーダーをデータで選ぶ</h3><p>短期利益だけで判断せず、継続期間、総利益、最大DD、勝率、取引頻度、平均保有時間を横断して確認します。</p><div class="tag-list"><span class="tag">平均月利</span><span class="tag">最大DD</span><span class="tag">勝率</span><span class="tag">取引頻度</span></div></article>
+          <article class="flow-card reveal"><h3>対応銘柄をMT5へコピーする</h3><p>MT5側で取引できる暗号資産であれば、銘柄名を確認してコピー対象に設定できます。最初の建玉を基準に数量比率を連動させ、増し玉や部分決済、全決済まで追従します。</p><div class="tag-list"><span class="tag">基準ロット設定</span><span class="tag">増し玉に対応</span><span class="tag">部分決済に対応</span></div></article>
+          <article class="flow-card reveal"><h3>全銘柄の動きをDiscordで受け取る</h3><p>新規エントリー、増し玉、部分決済、全決済、ドテンを通知します。HYPEや話題の銘柄をトレーダーが取引したときも、通知を見て自分で参加するか判断できます。</p><div class="tag-list"><span class="tag">エントリー通知</span><span class="tag">決済通知</span><span class="tag">全銘柄を監視</span></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap split">
+        <article class="mode-card featured reveal">
+          <div class="mode-icon">MT5</div>
+          <h2>チャートを見ていない時間も、<br>MT5で売買を追えます。</h2>
+          <p class="muted">最初に基準ロットを決めれば、その後の増し玉は元トレーダーの数量比率に合わせて計算します。実際の発注は、利用するFX業者の最小ロットとロット刻みに合わせて調整されます。</p>
+          <ul class="check-list"><li>MT5で取引できる対応銘柄</li><li>トレーダーごとにコピーをON・OFF</li><li>増し玉・部分決済・全決済に対応</li><li>新規取引はいつでも停止可能</li></ul>
+        </article>
+        <article class="mode-card reveal">
+          <div class="mode-icon">#</div>
+          <h2>自動コピーしない銘柄も、<br>売買の動きは確認できます。</h2>
+          <p class="muted">値動きの大きい銘柄を、何でも自動で取引する必要はありません。通知だけ受け取り、現物で買うのか、レバレッジを使うのか、何もしないのかを自分で判断できます。</p>
+          <ul class="check-list"><li>エントリー・エグジット通知</li><li>対応範囲内の注目銘柄をカバー</li><li>現物取引の参考にも利用可能</li><li>コピーのみ・通知のみ・両方を選択</li></ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow">成果報酬はかかりません</span>
+          <h2>利益がいくらになっても、<br>支払う金額は月額14,900円です。</h2>
+          <p class="lead">たとえば成果報酬が20%なら、利益が大きくなるほど支払額も増えていきます。Million Trader Watch Copy &amp; Signalsは月額固定です。下の金額を動かすと、その違いを確認できます。</p>
+        </div>
+        <div class="calculator reveal">
+          <div class="calc-control">
+            <label for="profit">仮に、その月の利益が</label>
+            <div class="profit-value" id="profitValue">1,000,000円</div>
+            <input id="profit" type="range" min="100000" max="10000000" step="100000" value="1000000" aria-describedby="calcNote">
+          </div>
+          <div class="calc-results">
+            <div class="calc-box"><small>成果報酬20%の例</small><strong id="successFee">200,000円</strong><span>利益に応じて負担が増える</span></div>
+            <div class="calc-box highlight"><small>Million Trader Watch</small><strong>14,900円</strong><span>利益額にかかわらず月額固定</span></div>
+            <p class="calc-foot" id="calcNote">※料金体系を比較するための仮定であり、利益を予測・保証するものではありません。取引手数料、スプレッド、各取引環境の費用は含みません。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section limited-section" id="limited-access" aria-labelledby="limited-title">
+      <div class="wrap">
+        <div class="founder-letter">
+          <div>
+            <span class="eyebrow">提供者から、正直にお伝えしたいこと</span>
+            <h2 id="limited-title">自分でも使い続けたい。<br><span class="gold">だから、何百人にも<br>広めません。</span></h2>
+            <p class="lead">希望する方全員にお渡しする予定はありません。Million Trader Watchは、人数を絞って提供します。</p>
+          </div>
+          <div class="founder-copy">
+            <p>販売や配布をしなくても、自分の資金で運用して、利益を積み上げていける可能性がある。僕自身、このツールにそれだけの期待を持っています。</p>
+            <p>実績のあるトレーダーが、どこで入り、どこで決済するのか。その動きを自分の運用にも取り入れられる。そこに価値を感じているからこそ、今はメンバーシップの方や、Xとは関係のない、普段から仲のいい友人にも話をしています。</p>
+            <p><strong>ブローカーへの紹介で得られるIB報酬を、僕が受け取るつもりもありません。</strong></p>
+            <p>ただ、広まりすぎることには慎重です。利用が広がることで、連携先などの対応や仕様が変わり、今の仕組みを使えなくなる可能性を懸念しています。</p>
+            <p>そうなれば、使っている方にも影響が出ます。提供を続けることも、その収益を得ることも難しくなる。何より、僕自身が運用できなくなるのが一番困るんです。</p>
+            <p><strong>せっかく作ったものだから、長く使い続けたい。</strong><br>人気が出たとしても、利用者を際限なく増やすつもりはありません。</p>
+          </div>
+        </div>
+        <div class="limited-policy">
+          <strong>リリース時には、利用人数に上限を設けます。</strong>
+          <p>希望者全員への提供は予定していません。募集人数・受付状況はLINEでご確認ください。無料体験をご希望の方には、受付状況をご案内します。</p>
+        </div>
+        <p class="limited-note">※上記は提供者の考えと提供方針です。人数制限によって将来の利益やサービスの継続が保証されるものではありません。</p>
+        <div class="button-row" style="margin-top:24px"><a class="btn btn-line" href="#line-flow">7日間無料体験の申込方法を見る</a></div>
+      </div>
+    </section>
+
+    <section class="section" id="price">
+      <div class="wrap pricing-wrap">
+        <div class="reveal">
+          <span class="eyebrow">気に入ってから加入できます</span>
+          <h2>最初から、メンバーシップへ<br>入る必要はありません。</h2>
+          <p class="lead">まずはLINEから申し込み、7日間無料で実際に使ってください。通知の速さやコピーの動きまで確認し、「これなら続けたい」と思った場合だけnoteメンバーシップへ加入できます。</p>
+          <p class="muted">同じような監視、通知、MT5連携の仕組みを単体で販売するなら、30万円から50万円ほどになっても不思議ではありません。それを月額14,900円で利用でき、EAやインジケーターなど、ほかの対象特典も受け取れます。</p>
+        </div>
+        <aside class="price-card reveal" aria-label="料金プラン">
+          <span class="trial-badge">専用コードで7日間無料</span>
+          <small>NOTE MEMBERSHIP</small>
+          <div class="price">14,900<small>円 / 月</small></div>
+          <p>7日間試したあと、気に入った場合だけ加入してください。成果報酬はかからず、利用料金は月額固定です。</p>
+          <ul class="check-list"><li>選定トレーダーの監視データ</li><li>MT5自動コピー機能</li><li>Discordエントリー・エグジット通知</li><li>成績確認・入れ替え情報</li><li>停止後も再開可能</li></ul>
+          <div class="membership-extra"><strong>1か月単位で、いつでも停止できます</strong><span>何か月も続ける必要はありません。合わなければ1か月でやめられます。続けたい場合は、そのまま利用を継続できます。対象特典の受取は月1点までです。</span></div>
+          <a class="btn btn-line" href="#line-flow">LINEで7日間無料体験を申し込む</a>
+          <div class="code-box">LINEでツール本体と、7日間だけ利用できる専用コードをお渡しします。</div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" id="line-flow">
+      <div class="wrap">
+        <div class="section-head reveal"><span class="eyebrow">無料体験から利用開始まで</span><h2>まず7日間、無料で使う。<br>続けるかどうかは、そのあとで決める。</h2><p class="lead">最初に料金を払ってから判断する必要はありません。LINEで「Million Trader Watchを使いたい」とご連絡ください。</p></div>
+        <div class="trial-flow">
+          <article class="trial-step reveal"><h3>LINEで連絡する</h3><p>「Million Trader Watchを使いたい」とメッセージを送ります。</p></article>
+          <article class="trial-step reveal"><h3>ツールと専用コードを受け取る</h3><p>LINEでツール本体と、7日間だけ使える無料体験コードを受け取ります。</p></article>
+          <article class="trial-step reveal"><h3>7日間、実際に試す</h3><p>通知やMT5コピーの動きを確認します。最初は通知だけ、または小さなロットから始められます。</p></article>
+          <article class="trial-step reveal"><h3>気に入ったら加入する</h3><p>継続したい場合のみ、月額14,900円のnoteメンバーシップへ加入します。</p></article>
+        </div>
+        <div class="cancel-note reveal" id="line-contact"><strong>合わなければ加入しなくて大丈夫です。</strong><span>加入後も1か月単位で停止できます。長期契約ではありません。継続する限り、選抜トレーダーの売買を追い続けられます。ただし、将来の利益を保証するものではありません。</span></div>
+        <div class="button-row" style="margin-top:24px"><a class="btn btn-line" href="#line-contact">LINEで無料体験を申し込む</a></div>
+      </div>
+    </section>
+
+    <section class="section" id="faq">
+      <div class="wrap">
+        <div class="section-head"><span class="eyebrow">よくある質問</span><h2>いくらから始められる？<br>どこまで、自分で調整できる？</h2><p class="lead">運用資金、ロットの上限、ブローカー選び。利用前に知っておきたいことをまとめました。</p></div>
+        <nav class="faq-nav" aria-label="質問の分類"><a href="#faq-funds">資金・リスク・利益</a><a href="#faq-environment">ブローカー・対応銘柄</a><a href="#faq-membership">申込み・利用条件</a></nav>
+
+        <div class="faq-group" id="faq-funds">
+          <h3>資金・リスク・利益について</h3>
+          <div class="faq">
+            <details open><summary>証拠金はいくらから運用できますか？</summary><div class="faq-answer">
+              <p><strong>BTCを含むMT5コピーでは、運用資金10万〜30万円程度を検討の目安としています。</strong>BTCで複数のポジションを持つなら数十万円、ETHだけを小さな数量で取引するなら数万円から検討する、という考え方です。これは提供者による目安であり、一律の最低入金額や、安全を保証する金額ではありません。</p>
+              <p>必要な資金は、価格、1ロットあたりの数量、最小ロット、同時にコピーする人数で変わります。<strong>注文に必要な証拠金と、実際に値動きの影響を受ける取引額は別です。</strong></p>
+              <div class="faq-example">
+                <p><strong>BTCが1枚1,200万円の場合の計算例</strong><br>1ロット＝1BTC、口座の有効証拠金＝10万円、他の建玉なしと仮定します。現在価格を示すものではありません。</p>
+                <table class="faq-table"><caption>同じ資金でも、数量でリスクは変わります</caption><thead><tr><th scope="col">保有量</th><th scope="col">取引額</th><th scope="col">実効レバレッジ</th></tr></thead><tbody><tr><td>0.01ロット</td><td>12万円</td><td>1.2倍</td></tr><tr><td>0.04ロット</td><td>48万円</td><td>4.8倍</td></tr></tbody></table>
+                <p>0.04ロットを買って価格が20％下落すると、単純計算で約9万6,000円の損失です。強制決済のタイミングはブローカーの証拠金維持率などによって異なり、20％下がる前にロスカットされる場合もあります。</p>
+                <p class="faq-note">実効レバレッジ＝取引額÷有効証拠金。上記は手数料・スプレッド・スワップ・為替変動を除いた例です。</p>
+              </div>
+              <p>ETHが1枚40万円、1ロット＝1ETHなら、0.01ロットの取引額は4,000円です。0.01ロットから取引できる口座では数量を抑えやすくなりますが、最小ロットが異なる口座もあります。</p>
+              <p class="faq-note">利用口座のMT5で「気配値表示」→銘柄を右クリック→「仕様」を開き、契約サイズ・最小数量・証拠金条件を確認してください。<a href="https://www.metatrader5.com/ja/terminal/help/trading/market_watch#specification" target="_blank" rel="noopener noreferrer">MT5公式：銘柄の仕様</a></p>
+            </div></details>
+            <details><summary>ポジションを取りすぎて、資金がなくなることはありませんか？</summary><div class="faq-answer">
+              <p><strong>保有ポジション数や合計ロット数に上限を設け、持ちすぎを抑えることができます。</strong>コピーするトレーダーを増やすときも、ご自身の資金に合わせて最大数量を設定してください。</p>
+              <p>ただし、数量の制限は損失額の保証ではありません。上限を大きく設定した場合や、相場が急変した場合には、大きな損失や資金の全損につながる可能性があります。BTCとETHでは同じ0.01ロットでも取引額が違うため、ロット数だけでなく、口座全体の取引額と余力を確認することが大切です。</p>
+            </div></details>
+            <details><summary>コピー元のトレーダーと同じレバレッジになりますか？</summary><div class="faq-answer">
+              <p>同じになるとは限りません。MT5側の基準ロットや上限を、ご自身の資金に合わせて設定します。<strong>実際のリスクは、自分の口座でどれだけの取引額を持つかで変わります。</strong></p>
+              <p>増し玉や複数トレーダーの同時エントリーで、合計の取引額は増える場合があります。口座に設定された最大レバレッジと、現在の建玉から計算する実効レバレッジも別のものです。</p>
+            </div></details>
+            <details><summary>利益はどのくらい期待できますか？</summary><div class="faq-answer">
+              <p><strong>過去に大きな利益を記録したトレーダーの売買を追えることが、本ツールの魅力です。</strong>たとえば保存された公開成績では、Trader 11の累計利益率は+239.8%、Trader 03は+921.3%でした。</p>
+              <p>ただ、累計で利益が出ていても、毎月勝ち続けているわけではありません。同じ資料でTrader 11の直近1か月は−17.3%です。掲載している1か月の利益率は、その期間の結果であり、平均月利や今後の期待値ではありません。</p>
+              <p>これらは<strong>コピー元の公開口座全体の参考実績</strong>です。ご自身の結果は、資金とロットの比率、コピーする銘柄、数量上限、手数料や注文が成立する価格によって変わります。複数のトレーダーの利益率を足し合わせることもできません。</p>
+              <p>まずは7日間の無料体験で、売買の通知やコピーの動きがご自身の使い方に合うかを確かめてください。損失が出る場合もあり、掲載実績と同じ利益を約束するものではありません。</p>
+              <p><a href="#track-records">登録トレーダー15人の参考実績を見る</a></p>
+            </div></details>
+          </div>
+        </div>
+
+        <div class="faq-group" id="faq-environment">
+          <h3>ブローカー・対応銘柄について</h3>
+          <div class="faq">
+            <details><summary>どのFXブローカーでも利用できますか？</summary><div class="faq-answer">
+              <p><strong>MT5に対応し、コピーしたい暗号資産CFDを取り扱い、EAによる自動売買を利用できる口座が基本条件です。</strong>MT5が使えても、暗号資産を取り扱っていない口座ではコピーできません。</p>
+              <p>さらに、システムの対応銘柄とブローカー側の銘柄名の設定、契約サイズ、最小ロット、取引時間などを確認する必要があります。すべてのブローカーでの動作を保証するものではないため、無料体験中にご利用口座で接続・発注条件を確認してください。</p>
+            </div></details>
+            <details><summary>どのFXブローカーを選べばいいですか？</summary><div class="faq-answer">
+              <p><strong>スプレッドが狭く、保有中のコストが抑えられる口座を比較してください。</strong>対象にはデイトレードからスイングトレードを行うトレーダーがおり、数日間ポジションを保有することがあります。スワップがマイナスなら、その分だけ利益を削ることになります。</p>
+              <ul><li>スプレッドと売買手数料を合わせたコスト</li><li>対象銘柄のスワップと、スワップフリーの適用条件</li><li>最小ロット・契約サイズ・ロスカット条件</li><li>取引時間、出金条件、居住地域での利用可否</li></ul>
+              <p>スワップフリーでも、対象口座や銘柄、適用期間が限られたり、別の管理手数料がかかったりする場合があります。広告の表記だけで判断せず、ご自身の口座の最新条件を確認してください。<strong>提供者がIB報酬を受け取るためのブローカー指定は行いません。</strong></p>
+            </div></details>
+            <details><summary>ビットコインやイーサリアム以外も自動コピーできますか？</summary><div class="faq-answer">
+              <p><strong>ブローカーとシステムの両方が対応する銘柄であれば可能です。</strong>XRP（リップル）、SOL（ソラナ）、BNB、DOGE（ドージコイン）なども、取り扱いと銘柄設定が一致することが条件になります。</p>
+              <p>ブローカーが扱っているだけで、必ずコピーできるとは限りません。対応状況や最小ロットを確認してください。また、アルトコインはスプレッドが広い場合があるため、取引コストも含めて対象銘柄を選びましょう。</p>
+            </div></details>
+            <details><summary>FXブローカーにないアルトコインは、どう取引すればいいですか？</summary><div class="faq-answer">
+              <p><strong>Discordのエントリー・エグジット通知を参考に、暗号資産取引所でご自身で売買できます。</strong>MT5への自動コピーとは別の使い方です。</p>
+              <p>対象トレーダーが取引し、通知対象となっている銘柄なら、アルトコインやミームコインも通知を受け取れる場合があります。取引所でその銘柄を扱っているか確認し、ご自身で数量を決めてエントリー・決済を行ってください。すべての銘柄や取引が対象になるわけではありません。</p>
+              <p>通知を見てから売買するまでに価格が動くため、同じ価格や損益は再現できません。現物取引では、先物の売りポジションなどを同じ形で再現できない点にも注意してください。</p>
+            </div></details>
+          </div>
+        </div>
+
+        <div class="faq-group" id="faq-membership">
+          <h3>申込み・利用条件について</h3>
+          <div class="faq">
+            <details><summary>希望すれば、誰でも利用できますか？</summary><div class="faq-answer"><p>人数を絞って提供する方針のため、希望者全員への提供は予定していません。募集人数や受付状況はLINEでご確認ください。<a href="#limited-access">人数を制限する理由はこちら</a>をご覧ください。</p></div></details>
+            <details><summary>無料体験を始めるにはどうすればいいですか？</summary><div class="faq-answer"><p>LINEで「Million Trader Watchを使いたい」とご連絡ください。受付状況をご案内し、体験をご利用いただく方にツール本体と、7日間だけ利用できる専用コードをLINEでお送りします。<strong>メンバーシップへの加入は、無料体験後に気に入った場合だけで大丈夫です。</strong></p></div></details>
+            <details><summary>メンバーシップはすぐにやめられますか？</summary><div class="faq-answer"><p>はい。1か月単位で停止できるため、何か月も続ける必要はありません。継続したい期間だけ利用できます。退会手続きや利用期限はnoteメンバーシップの案内をご確認ください。</p></div></details>
+            <details><summary>メンバーシップでは、毎月いくつ特典を受け取れますか？</summary><div class="faq-answer"><p>対象となるEAやインジケーターなどの特典は、月1点まで受け取れます。Million Trader Watch Copy &amp; Signalsの利用条件と、ほかの特典の受取条件は、メンバーシップの最新案内をご確認ください。</p></div></details>
+            <details><summary>月額以外に成果報酬はかかりますか？</summary><div class="faq-answer"><p>本サービスの利用料はnoteメンバーシップの月額14,900円です。<strong>利益に応じた成果報酬は受け取りません。</strong>提供者がブローカーからIB報酬を受け取る予定もありません。</p><p>取引所・FXブローカー側の手数料、スプレッド、スワップ、通信・VPS等の費用は別途発生する場合があります。</p></div></details>
+            <details><summary>どうして、他人の売買を追うことができるのですか？</summary><div class="faq-answer"><p>一部の取引所では、口座ごとの売買記録が誰でも見られる形で公開されています。本ツールは、その記録を調べて対象を選び、新しい売買を読み取って通知やコピーにつなげています。トレーダー本人が紹介報酬を得るために配信する仕組みとは異なります。</p><p><a href="#how-it-works">仕組みをわかりやすく見る</a></p></div></details>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap risk">
+        <h3>リスクおよび重要事項</h3>
+        <p>本サービスは、取引情報の提供および取引支援機能を目的とするもので、利益を保証するものではありません。暗号資産・外国為替証拠金取引等は価格変動が大きく、レバレッジ取引では預け入れた資金を上回る損失が生じる場合があります。過去の成績は将来の結果を保証しません。システム障害、通信遅延、価格差、スリッページ、流動性低下、取引所・ブローカーの仕様変更等により、監視対象と同一の結果にならないことがあります。実際の取引は、各サービスの規約および居住地域の法令を確認し、ご自身の判断と責任で行ってください。余裕資金を超える取引は行わないでください。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer-row"><span>© 2026 Million Trader Watch Copy &amp; Signals</span><span>本ページ内の数値・画面は料金体系および機能説明のための例を含みます。</span></div>
+  </footer>
+
+  <script>
+    const profit = document.getElementById('profit');
+    const profitValue = document.getElementById('profitValue');
+    const successFee = document.getElementById('successFee');
+    const yen = new Intl.NumberFormat('ja-JP');
+
+    function updateCalculator() {
+      const value = Number(profit.value);
+      profitValue.textContent = yen.format(value) + '円';
+      successFee.textContent = yen.format(value * 0.2) + '円';
+    }
+    profit.addEventListener('input', updateCalculator);
+    updateCalculator();
+
+    const traderTrack = document.getElementById('trader-track');
+    const traderPages = [...traderTrack.querySelectorAll('.trader-page')];
+    const traderPageButtons = [...document.querySelectorAll('[data-trader-page]')];
+    const traderPrev = document.getElementById('trader-prev');
+    const traderNext = document.getElementById('trader-next');
+    const traderStatus = document.getElementById('trader-status');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let traderPageIndex = 0;
+    let traderScrollFrame = 0;
+
+    function traderPageLeft(index) {
+      return traderPages[index].offsetLeft - traderPages[0].offsetLeft;
+    }
+
+    function updateTraderNavigation(index) {
+      traderPageIndex = index;
+      traderPrev.disabled = index === 0;
+      traderNext.disabled = index === traderPages.length - 1;
+      traderPageButtons.forEach((button, page) => button.setAttribute('aria-current', String(page === index)));
+      const first = String(index * 3 + 1).padStart(2, '0');
+      const last = String(Math.min(index * 3 + 3, 15)).padStart(2, '0');
+      const label = `${index + 1} / ${traderPages.length}ページ · Trader ${first}–${last}`;
+      if (traderStatus.textContent !== label) traderStatus.textContent = label;
+    }
+
+    function goToTraderPage(index, animate = true) {
+      const page = Math.max(0, Math.min(index, traderPages.length - 1));
+      updateTraderNavigation(page);
+      traderTrack.scrollTo({left: traderPageLeft(page), behavior: animate && !reducedMotion.matches ? 'smooth' : 'instant'});
+    }
+
+    traderPrev.addEventListener('click', () => goToTraderPage(traderPageIndex - 1));
+    traderNext.addEventListener('click', () => goToTraderPage(traderPageIndex + 1));
+    traderPageButtons.forEach((button, page) => button.addEventListener('click', () => goToTraderPage(page)));
+    traderTrack.addEventListener('keydown', (event) => {
+      if (event.target !== traderTrack) return;
+      const pages = {ArrowLeft: traderPageIndex - 1, ArrowRight: traderPageIndex + 1, Home: 0, End: traderPages.length - 1};
+      if (Object.hasOwn(pages, event.key)) {
+        event.preventDefault();
+        goToTraderPage(pages[event.key]);
+      }
+    });
+    traderTrack.addEventListener('scroll', () => {
+      if (traderScrollFrame) return;
+      traderScrollFrame = requestAnimationFrame(() => {
+        traderScrollFrame = 0;
+        const nearest = traderPages.reduce((best, _, page) =>
+          Math.abs(traderPageLeft(page) - traderTrack.scrollLeft) < Math.abs(traderPageLeft(best) - traderTrack.scrollLeft) ? page : best, 0);
+        updateTraderNavigation(nearest);
+      });
+    }, {passive: true});
+    new ResizeObserver(() => goToTraderPage(traderPageIndex, false)).observe(traderTrack);
+    updateTraderNavigation(0);
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+  </script>
+</body>
+</html>
