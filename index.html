@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8">
-  <meta name="build-version" content="mtw-lp-20260926-r6">
+  <meta name="build-version" content="mtw-lp-20260927-r7">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="世界の高収益トレーダーの取引をリアルタイムで監視し、MT5自動コピーとDiscord通知で活用できるMillion Trader Watch Copy &amp; Signals。">
   <meta name="theme-color" content="#07110f">
@@ -500,6 +500,52 @@
       .banner-disclosure { margin-inline: 3px; }
       .hero-with-banner .hero-support { margin-top: 28px; }
     }
+    .sales-story { width: min(840px, calc(100% - 40px)); margin: 76px auto 60px; color: #cddbd4; font-size: clamp(1rem,1.5vw,1.125rem); line-height: 1.95; }
+    .sales-story > * { min-width: 0; }
+    .sales-story h2, .sales-story h3 { color: var(--paper); line-height: 1.55; letter-spacing: normal; overflow-wrap: anywhere; }
+    .sales-story h2 { margin: 0 0 30px; font-size: clamp(1.7rem,3.5vw,2.65rem); }
+    .sales-story h3 { margin: 0 0 24px; font-size: clamp(1.4rem,2.8vw,2rem); }
+    .sales-story p { margin-bottom: 22px; }
+    .sales-story strong { color: var(--paper); }
+    .sales-block { padding: 0 16px; }
+    .sales-block + .sales-block { margin-top: 52px; padding-top: 46px; border-top: 1px solid var(--line); }
+    .sales-frustration { padding: 22px 24px; border-left: 3px solid var(--gold); background: rgba(242,203,104,.055); }
+    .sales-frustration p { margin-bottom: 14px; }
+    .sales-frustration p:last-child { margin-bottom: 0; }
+    .sales-quote { margin: 30px 0; color: #f2db9b; font-size: clamp(1.3rem,2.9vw,2rem); font-weight: 850; line-height: 1.7; }
+    .sales-quote p { margin: 0; }
+    .sales-story .sales-turn { margin: 36px 0 24px; font-size: clamp(1.75rem,4.4vw,3rem); color: var(--mint); font-weight: 900; line-height: 1.6; }
+    .sales-solution { margin-top: 38px; padding: clamp(24px,4vw,40px); border: 1px solid rgba(56,231,160,.35); border-radius: 20px; background: linear-gradient(135deg,#13352a,#0c2119); }
+    .sales-solution .sales-product { margin: 28px 0; padding-block: 22px; border-block: 1px solid var(--line); }
+    .sales-product strong { display: block; margin-top: 6px; color: var(--mint); font-size: clamp(1.35rem,3.2vw,2rem); line-height: 1.45; }
+    .sales-product small { display: block; color: #bad5c7; font-size: .875rem; }
+    .sales-solution p:last-child { margin-bottom: 0; }
+    .sales-story .sales-risk { margin: 18px 8px 0; color: #a8bdb3; font-size: .875rem; line-height: 1.85; }
+    .hero-support h2 { font-size: clamp(1.75rem,3vw,2.6rem); line-height: 1.55; letter-spacing: normal; }
+    .limit-banner { display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 24px; padding: clamp(24px,4vw,42px); margin-bottom: 30px; border: 1px solid rgba(242,203,104,.6); border-radius: 20px; background: linear-gradient(120deg,#233825,#10251c); }
+    .limit-banner > * { min-width: 0; }
+    .limit-banner h2 { margin: 0 0 14px; font-size: clamp(1.55rem,3vw,2.2rem); line-height: 1.6; letter-spacing: normal; }
+    .limit-banner p { margin-bottom: 0; color: #c7d4cf; }
+    .limit-count { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: center; gap: 6px; color: var(--gold); font-size: 1.6rem; font-weight: 800; line-height: 1.3; }
+    .limit-count strong { font-family: Arial,Helvetica,sans-serif; font-size: clamp(4rem,8vw,7rem); font-weight: 900; line-height: 1.2; letter-spacing: normal; padding-right: .04em; }
+    .limit-count span:last-child { flex-basis: 100%; text-align: center; font-size: 1.25rem; letter-spacing: .15em; }
+    .limited-policy .limited-current-price { margin: 18px 0 14px; color: var(--paper); font-weight: 800; font-size: 1.1rem; }
+    .limited-note.future-terms { font-size: .875rem; color: #aebfb6; line-height: 1.85; }
+    .price-card .price-cap { margin: 0 0 18px; padding: 9px 14px; border: 1px solid rgba(242,203,104,.45); border-radius: 8px; color: var(--gold); font-size: 1rem; font-weight: 800; }
+    @media (max-width: 680px) {
+      .sales-story { width: calc(100% - 36px); margin-block: 48px 42px; }
+      .sales-block { padding-inline: 2px; }
+      .sales-block + .sales-block { margin-top: 36px; padding-top: 32px; }
+      .sales-story h2 { margin-bottom: 24px; }
+      .sales-frustration { padding: 18px 16px; }
+      .sales-quote { margin-block: 24px; }
+      .sales-story .sales-turn { margin-block: 28px 20px; }
+      .sales-solution { padding: 24px 18px; border-radius: 16px; }
+      .sales-story .sales-risk { margin-inline: 0; }
+      .limit-banner { grid-template-columns: minmax(0,1fr); text-align: center; gap: 20px; }
+      .limit-count { grid-row: 1; }
+      .limit-count strong { font-size: 5.5rem; }
+    }
   </style>
 </head>
 <body>
@@ -532,16 +578,51 @@
         </div>
         <p class="banner-disclosure">※掲載15口座の公開累計損益の合計。2026年9月保存の成績を1ドル＝155円で参考換算しています。集計期間は口座ごとに異なり、コピー対象外の銘柄を含む場合があります。本ツール利用者の利益や将来の成果を示すものではありません。</p>
       </div>
+      <section class="sales-story" id="why-copy" aria-labelledby="sales-story-title">
+        <div class="sales-block">
+          <h2 id="sales-story-title">仮想通貨のトレードで、<br><span class="gold">こんな悔しい思いを<br>していませんか。</span></h2>
+          <div class="sales-frustration">
+            <p>「上がりそうだ」と思って買った途端に下がる。<br>それならと売りから入ったら、今度は上がる。</p>
+            <p>我慢できずに損切りしたら、その直後に思っていた方向へ動き出す。</p>
+          </div>
+          <blockquote class="sales-quote"><p>「誰か、自分が注文するのを<br>見てるんじゃないか？」</p></blockquote>
+          <p>そう思いたくなるくらい、自分が入ったときに限って逆に動く。</p>
+          <p>適当に取引しているわけじゃない。<br>チャートも見ているし、情報も調べている。</p>
+          <p><strong>それなのに、口座のお金は減っていく。</strong></p>
+          <p>SNSを開けば、誰かの利益報告。<br>「同じ相場で取引しているのに、なんで自分だけ……」<br>そんな気持ちになることもあると思います。</p>
+        </div>
+        <div class="sales-block">
+          <h3>では、その相場で利益を出してきた人たちは、<br>いったいどんな売買をしているのでしょうか。</h3>
+          <p>仮想通貨の市場には、「クジラ」と呼ばれる大口の投資家がいます。大量に買ったり売ったりすることで、価格に大きな影響を与えることもある人たちです。</p>
+          <p>そして、激しく動く相場の中で、売買を重ねて大きな利益を残してきたトレーダーもいます。</p>
+          <p>その人は、今、何を買っているのか。<br>下がったときに買い増しているのか。それとも、すでに手放しているのか。</p>
+          <p class="sales-turn">その売買を、<br>カンニングできたら。</p>
+          <p>利益の報告をあとから見るだけでなく、実際に売買したタイミングで、その動きが分かる。</p>
+          <p><strong>しかも、見て終わりではありません。</strong></p>
+        </div>
+        <div class="sales-solution">
+          <h3>選んだトレーダーの売買に合わせて、<br><span class="accent">あなたの口座でも、自動で取引する。</span></h3>
+          <p class="sales-product">それをできるようにしたのが、<strong>Million Trader Watch</strong><small>Copy &amp; Signals</small></p>
+          <p>一部の取引所では、トレーダーの売買記録が公開されています。</p>
+          <p>その記録を調べ、過去の利益や損失、取引の内容を確認したトレーダーを掲載。新しい売買もツールが読み取り、通知や自動コピーに使います。</p>
+          <p>あなたは、成績を見てコピーしたい人を選び、取引する量や上限を設定します。</p>
+          <p>あとは、その人の売買に合わせて、対応するMT5口座へ自動で注文を送ります。新しく取引を始めるときだけでなく、取引を終えるときまで追いかけます。</p>
+          <p><strong>仕事中も、寝ている間も。</strong><br>設定した環境が動いていれば、売買のたびに自分で注文する必要はありません。</p>
+          <p>自分で判断して取引したい方は、Discordで売買のお知らせだけを受け取る使い方もできます。</p>
+        </div>
+        <p class="sales-risk">※過去の実績は将来の利益を保証するものではありません。相場や設定によって損失が生じます。また、対応銘柄や注文の時間差などにより、コピー元と同じ取引・成績になるとは限りません。取引手数料などは別途かかります。</p>
+      </section>
       <div class="wrap hero-grid hero-support">
         <div class="hero-copy">
-          <span class="eyebrow">世界の高収益トレーダーをリアルタイム監視</span>
-          <p class="lead">どこで入り、どこで利益を確定し、どこで損切りしたのか。Million Trader Watch Copy &amp; Signalsなら、実際に結果を残してきたトレーダーの売買がリアルタイムで分かります。対応銘柄はMT5へ自動コピー。それ以外の取引もDiscordで受け取れます。</p>
+          <span class="eyebrow">実際の成績と取引画面をご覧ください</span>
+          <h2>どんなトレーダーの取引を<br><span class="accent">コピーできるのか。</span></h2>
+          <p class="lead">掲載している15人の成績と、実際の取引画面をご紹介します。累計の利益だけでなく、最近の成績や損失も見比べてみてください。</p>
           <div class="button-row">
-            <a class="btn btn-primary membership-cta" href="https://note.com/webview/reofx/membership" target="_blank" rel="noopener noreferrer">ご利用のお申し込みはこちら</a>
-            <a class="btn btn-secondary" href="#actual-screen">実際の画面を見る</a>
+            <a class="btn btn-primary" href="#actual-screen">トレーダーの成績と実際の画面を見る</a>
+            <a class="btn btn-secondary membership-cta" href="https://note.com/webview/reofx/membership" target="_blank" rel="noopener noreferrer">メンバーシップの内容を確認する</a>
           </div>
           <p class="hero-note">noteメンバーシップ月額14,900円で利用可能 / 成果報酬なし / 長期契約の縛りなし</p>
-          <a class="limited-link" href="#limited-access">人数を絞って提供します。その理由はこちら</a>
+          <a class="limited-link" href="#limited-access">今回の募集は100名限定です</a>
         </div>
 
         <div class="terminal" aria-label="トレーダー分析画面のイメージ">
@@ -865,11 +946,18 @@
 
     <section class="section limited-section" id="limited-access" aria-labelledby="limited-title">
       <div class="wrap">
+        <div class="limit-banner">
+          <div>
+            <h2 id="limited-title">今回の募集は、<br><span class="gold">100名限定です。</span></h2>
+            <p>現時点では100名を上限とし、<br>定員に達したところで今回の募集を締め切ります。</p>
+          </div>
+          <div class="limit-count" aria-hidden="true"><strong>100</strong><span>名</span><span>限定募集</span></div>
+        </div>
         <div class="founder-letter">
           <div>
             <span class="eyebrow">提供者から、正直にお伝えしたいこと</span>
-            <h2 id="limited-title">自分でも使い続けたい。<br><span class="gold">だから、何百人にも<br>広めません。</span></h2>
-            <p class="lead">希望する方全員にお渡しする予定はありません。Million Trader Watchは、人数を絞って提供します。</p>
+            <h2>自分でも使い続けたい。<br><span class="gold">だから、提供する<br>人数は絞ります。</span></h2>
+            <p class="lead">Million Trader Watchを、何百人、何千人と際限なく広めるつもりはありません。</p>
           </div>
           <div class="founder-copy">
             <p>販売や配布をしなくても、自分の資金で運用して、利益を積み上げていける可能性がある。僕自身、このツールにそれだけの期待を持っています。</p>
@@ -881,11 +969,14 @@
           </div>
         </div>
         <div class="limited-policy">
-          <strong>リリース時には、利用人数に上限を設けます。</strong>
-          <p>人数を絞って提供するため、ご加入前にメンバーシップの最新の募集案内・利用条件をご確認ください。受付状況についてのご質問はLINEで承ります。</p>
+          <strong>この仕組みを、月額14,900円のメンバーシップで。</strong>
+          <p>利益に応じた成果報酬はかかりません。長期契約の縛りもなく、月単位で継続・退会を選べます。</p>
+          <p class="limited-current-price">現在の募集上限は100名です。</p>
+          <p>利用を希望される方は、メンバーシップページで募集状況と利用条件をご確認ください。加入前のご質問はLINEで承ります。</p>
         </div>
+        <p class="limited-note future-terms">※100名到達後の追加募集・再募集は未定です。今後、メンバーシップ料金を値上げする可能性もありますが、現時点で実施時期や条件は決まっていません。</p>
         <p class="limited-note">※上記は提供者の考えと提供方針です。人数制限によって将来の利益やサービスの継続が保証されるものではありません。</p>
-        <div class="button-row" style="margin-top:24px"><a class="btn btn-primary membership-cta" href="https://note.com/webview/reofx/membership" target="_blank" rel="noopener noreferrer">ご利用のお申し込みはこちら</a></div>
+        <div class="button-row" style="margin-top:24px"><a class="btn btn-primary membership-cta" href="https://note.com/webview/reofx/membership" target="_blank" rel="noopener noreferrer">メンバーシップの内容・募集状況を確認する</a></div>
       </div>
     </section>
 
@@ -898,6 +989,7 @@
           <p class="muted">メンバーシップには、EAやインジケーターなどの対象特典もあります。特典の受取は月1点まで。対象となる特典や利用条件は、加入ページの最新案内をご確認ください。</p>
         </div>
         <aside class="price-card reveal" aria-label="料金プラン">
+          <p class="price-cap">今回の募集は100名限定</p>
           <span class="membership-badge">成果報酬 0円</span>
           <small>NOTE MEMBERSHIP</small>
           <div class="price">14,900<small>円 / 月</small></div>
@@ -1001,7 +1093,7 @@
         <div class="faq-group" id="faq-membership">
           <h3>申込み・利用条件について</h3>
           <div class="faq">
-            <details><summary>希望すれば、誰でも利用できますか？</summary><div class="faq-answer"><p>人数を絞って提供する方針のため、ご加入前にメンバーシップの最新の募集案内をご確認ください。受付状況について不明な点がある場合は、LINEでご質問ください。<a href="#limited-access">人数を制限する理由はこちら</a>をご覧ください。</p></div></details>
+            <details><summary>希望すれば、誰でも利用できますか？</summary><div class="faq-answer"><p><strong>今回の募集は100名限定です。</strong>現時点では100名を上限とし、定員に達したところで今回の募集を締め切ります。ご加入前にメンバーシップページで最新の募集状況・利用条件をご確認ください。受付状況について不明な点がある場合は、LINEでご質問ください。<a href="#limited-access">人数を制限する理由はこちら</a>をご覧ください。</p><p class="faq-note">※100名到達後の追加募集・再募集は未定です。今後、メンバーシップ料金を値上げする可能性もありますが、現時点で実施時期や条件は決まっていません。</p></div></details>
             <details><summary>利用するにはどうすればいいですか？</summary><div class="faq-answer"><p><strong>月額14,900円のnoteメンバーシップへの加入で利用できます。</strong><a href="https://note.com/webview/reofx/membership" target="_blank" rel="noopener noreferrer">こちらの加入ページ</a>で対象プラン・募集状況・利用条件をご確認ください。加入後は、メンバー向けの案内に沿って利用準備を進めてください。</p><p>加入前のお問い合わせやご質問は、<a href="https://lin.ee/PnC7q9J" target="_blank" rel="noopener noreferrer">LINE</a>で承ります。</p></div></details>
             <details><summary>毎日、売買の通知が届きますか？</summary><div class="faq-answer"><p>毎日届くとは限りません。対象トレーダーが売買したときに通知されるため、選ぶトレーダーや相場の状況によって取引頻度が変わります。数日間ポジションを保有することもあり、短期間の取引回数や利益を約束するものではありません。</p></div></details>
             <details><summary>メンバーシップはすぐにやめられますか？</summary><div class="faq-answer"><p>はい。1か月単位で停止できるため、何か月も続ける必要はありません。継続したい期間だけ利用できます。退会手続きや利用期限はnoteメンバーシップの案内をご確認ください。</p></div></details>
