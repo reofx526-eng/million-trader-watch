@@ -2,6 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8">
+  <meta name="build-version" content="mtw-lp-20260926-r6">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="世界の高収益トレーダーの取引をリアルタイムで監視し、MT5自動コピーとDiscord通知で活用できるMillion Trader Watch Copy &amp; Signals。">
   <meta name="theme-color" content="#07110f">
@@ -464,8 +465,7 @@
     .hero .banner-headline .banner-total { display: flex; justify-content: center; align-items: baseline; flex-wrap: wrap; gap: 0 .16em; color: #ffefb5; font-size: clamp(2rem,4vw,3.15rem); }
     .hero .banner-headline .banner-total-label { white-space: nowrap; color: var(--paper); font-size: .85em; letter-spacing: .01em; }
     .hero .banner-headline .banner-amount { display: inline-flex; align-items: baseline; white-space: nowrap; gap: .055em; }
-    .banner-amount strong { color: #f6d476; font-size: clamp(5rem,12.5vw,10.2rem); font-weight: 900; line-height: 1.05; letter-spacing: -.07em; font-variant-numeric: lining-nums tabular-nums; text-shadow: 0 3px 0 #725021,0 10px 40px rgba(242,203,104,.13); }
-    @supports (-webkit-background-clip: text) { .banner-amount strong { background: linear-gradient(180deg,#fff9d2 8%,#e7b744 55%,#ffe6a0 84%); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: none; filter: drop-shadow(0 3px 0 #725021); } }
+    .banner-amount strong { display: inline-block; flex: 0 0 auto; padding: .04em .12em .06em .06em; overflow: visible; color: #f6d476; font-family: Arial, Helvetica, sans-serif; font-size: clamp(5rem,11.5vw,9.4rem); font-weight: 900; line-height: 1.12; letter-spacing: normal; font-variant-numeric: lining-nums tabular-nums; background: none; -webkit-text-fill-color: currentColor; text-shadow: 0 2px 0 #725021,0 8px 28px rgba(242,203,104,.13); }
     .hero .banner-headline .banner-approx { display: inline; font-size: .75em; }
     .hero .banner-headline .banner-unit { display: inline; font-size: 1.12em; }
     .hero .banner-headline .banner-connector { display: inline; font-size: .7em; color: var(--paper); }
@@ -488,7 +488,8 @@
       .hero .banner-headline { margin: 24px 0 25px; }
       .hero .banner-headline .banner-total { gap: 0 .12em; font-size: clamp(1.4rem,6vw,2.4rem); }
       .hero .banner-headline .banner-total-label { flex: 0 0 100%; margin-bottom: 6px; font-size: 1.05em; letter-spacing: .12em; }
-      .banner-amount strong { font-size: clamp(4rem,20.8vw,8rem); letter-spacing: -.065em; }
+      .banner-amount strong { font-size: clamp(3.25rem,18.5vw,7.4rem); letter-spacing: normal; }
+      .hero .banner-headline .banner-amount { max-width: 100%; flex-wrap: wrap; justify-content: center; column-gap: .08em; }
       .hero .banner-headline .banner-unit { font-size: 1.18em; }
       .hero .banner-headline .banner-connector { font-size: .72em; }
       .hero .banner-headline .banner-team { margin-top: 20px; font-size: clamp(1.7rem,8.6vw,3.5rem); line-height: 1.2; gap: 3px 0; }
